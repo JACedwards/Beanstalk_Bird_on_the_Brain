@@ -1,0 +1,101 @@
+{% extends 'components/layout.html' %}
+
+{% block title %}Sightings{% endblock title %}
+
+{% block header %}
+{% endblock header %}
+
+{% block content %}
+
+<br>
+<h3 style="color:#088256;text-align:center">Add a Bird to Your Lists</h3>
+
+<hr style="border: 5px solid #088256;margin-bottom: -10px;padding-bottom:-10px">
+
+<table style="margin-left: auto; margin-right: auto">
+    <tr>
+        <td>
+            <form class="p-5" method="POST">
+            {{  form.hidden_tag() }}
+
+                <div class="form-group">
+                    <fieldset>
+                        {{ form.common_name.label }}
+                        {{ form.common_name(class='form-control', size='50') }}
+                    </fieldset>
+                </div>
+                
+                <div class="form-group">
+                    <fieldset>
+                        {{ form.state.label }}
+                        {{ form.state(class='form-control') }}
+                    </fieldset>
+                </div>
+                <div class="form-group">
+                    <fieldset>
+                        {{ form.date_year.label }}
+                        {{ form.date_year(class='form-control') }}
+                    </fieldset>
+                </div>
+                <p>
+                    <b>Fields Below Optional</b>
+                </p>
+                <div class="form-group">
+                    <fieldset>
+                        {{ form.date_month.label }}
+                        {{ form.date_month(class='form-control', placeholder='(2 digits: April = 04)') }}
+                    </fieldset>
+                </div>
+                <div class="form-group">
+                    <fieldset>
+                        {{ form.date_day.label }}
+                        {{ form.date_day(class='form-control', placeholder='(2 digits: First = 01)') }}
+                    </fieldset>
+                </div>
+
+
+                <div class="form-group">
+                    <fieldset>
+                        {{ form.county.label }}
+                        {{ form.county(class='form-control') }}
+                    </fieldset>
+                </div>
+             
+                <div class="form-group">
+                    <fieldset>
+                        {{ form.latin_name.label }}
+                        {{ form.latin_name(class='form-control') }}
+                    </fieldset>
+                </div>
+
+                <div class="form-group">
+                    <fieldset>
+                        {{ form.comments.label }}
+                        {{ form.comments(class='form-control', rows='4', type='textarea') }}
+                    </fieldset>
+                </div>
+
+                
+                <div class="form-group">
+                    <fieldset>
+                        {{ form.image.label }}
+                        {{ form.image(class='form-control', disabled='true', placeholder='(Planned future functionality)') }}
+                    </fieldset>
+                </div>
+
+                {{ form.submit(class='btn btn-primary', style='background-color:#088256;border-radius:10px;width:100%')}}
+            </div> 
+        </form>
+    </td>
+
+    <td>
+
+
+        <img style="width:628px;height:850px" src="../static/images/toucan.jpg" alt='oriole' />
+
+
+  </td>
+</tr>
+</table>
+
+  {% endblock content %}

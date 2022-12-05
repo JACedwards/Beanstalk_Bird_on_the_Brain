@@ -1,0 +1,133 @@
+{% extends 'components/layout.html' %}
+
+{% block title %}Charm Chirps{% endblock title %}
+
+{% block header %}
+{% endblock header %}
+
+{% block content %}
+
+<h3 style="color:#088256;text-align:center">Chirp at the Charm: Share Info with Other Bird Brainers<sup><span style="font-size:16px">*</span></sup></h3>
+
+<hr style="border: 5px solid #088256;">
+
+{% if not user %}
+    <div class="row justify-content-center">
+        <div class="col-6 justify-content-center">
+            <h3 style="color:red">404: Sorry! This nest is empty.  Make sure you are signed in.</h3>
+        </div>
+    </div>
+{% else %}
+
+
+
+    <div class="row">
+        <div class= "col-8"> 
+    
+            {% if user.id == current_user.id %}
+                <!-- Sam did not have class="3p" below -->
+                <form class="form-inline" method="POST" style="color:#088256;margin-left:30px">
+                    {{form.hidden_tag()}}
+                    <div class="form-group" style="border: 1px solid #088256" >
+                        <fieldset id="new_post-field" >
+                            <!-- Sam removed next line -->
+                            {{ form.new_post(class='form-control', placeholder='Chirp to the Charm...', style='width:500px;') }}
+                
+                        </fieldset>
+                        <small id="emailHelp" class="form-text text-muted"></small>
+                    </div>
+
+                    <div style="background-color:#088256;border-radius:10px; margin-left: 50px">
+                        {{form.submit (class='btn btn-info btn-rounded', style='background-color:#088256;width:120px') }}
+                    </div>
+                        <!-- {{ form.submit(class='btn btn-block btn-info') }} -->
+                
+ 
+                    </form>
+            <div>
+                <hr style="margin-left:30px;background-color:#088256">
+            </div>
+            
+            <br>
+            
+            {% endif %}
+
+            {% if posts %}
+                {% for post in posts %}
+                <div class="card mb-3" style="margin-left:30px;border: 1px solid #088256">
+   
+                    <div class="card-header" style="background-color:#088256">
+                        <h5 class="m-0" style="color:white">@{{user.username}}
+                            {% if user.id == current_user.id %}
+                                <a class="btn btn-sm float-right mr-auto" style="background-color:#065739;color:white" href="{{ url_for('blog.deletePost', pid=post.id) }}">Delete</a>
+                            {% endif %}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                        <p> {{ post.body}} </p>
+                        <footer class="blockquote-footer"><cite title="Source Title">{{ post.timestamp.strftime('%Y/%#m/%#d (%#I:%M %p)') }}</cite></footer>
+                    </blockquote>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div style="border: 1px solid #088256;margin-left:30px;height:130px;background-color:#088256;color:white;border-radius: 10px;">
+                <h4 style="margin-top:50px;text-align:center">@{{user.username}} has no chirps to check.</h4>
+                </div>
+            {% endif %}
+
+        </div>
+        <div class= "col-4" style="padding-right:50px">
+            <div class="card" style="border: 1px solid #088256">
+                <!-- may want to restore image section later for user profile image -->
+                <!-- <img src="..." class="card-img-top" alt="..."> -->
+                <div class="card-body" style="background-color:#088256">
+                    <h5 class="card-title" style="color:white">{{ user.username }}</h5>
+                    <p class="card-text" style="color:rgb(160, 159, 159)">(Favorite Bird)</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">{{ user.first_name}}  {{ user.last_name}}</li>
+                    <li class="list-group-item">Bird Brain Member Since {{ user.created.strftime('%Y') }}</li>
+                </ul>
+
+                {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-block btn-info" style="background-color:#088256">Sign in to follow</a>
+                
+
+                {% elif user.id != current_user.id %}
+                <div class="card-body">
+                    {% if user in current_user.followed %}
+                    <a href="{{ url_for('blog.unfollow', uid=user.id) }}" class="btn btn-block btn-info" style="background-color:#088256">Unfollow</a>
+                    {% else %}
+                    <a href="{{ url_for('blog.follow', uid=user.id) }}" class="btn btn-block btn-info" style="background-color:#088256">Follow</a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+
+
+        </div>
+    </div>
+
+
+{% endif %}
+
+
+
+
+
+
+
+
+
+<br>
+<br>
+<br>
+<hr>
+<div style="margin-left:30px">
+    <p style="color:gray">*A "charm" is a name for a group of magpies or finches (<a href="https://safarisafricana.com/collective-nouns-for-birds/" style="font-size:13.5px;color:gray">Collective Bird Nouns</a>).</p>
+</div>
+
+
+{% endblock content%}
