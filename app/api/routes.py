@@ -97,13 +97,17 @@ def getAnnualList():
     galform = AnnualListForm()
 
     if request.method == 'POST':
-        
+        print("this is a test")
         if current_user.is_authenticated:
 
             gal_search=galform.data
+
             
             print(f'this is current users id" {current_user.id}')
             print('this is gal_search', gal_search)
+
+            filtered_list = []
+            which_list = ''
             for k , v in gal_search.items():
                 if v == '':
                     which_list = k
@@ -148,6 +152,12 @@ def getAnnualList():
                     if d['common_name'] not in existing_dicts:
                         existing_dicts.add(d['common_name'])
                         filtered_list.append(d)
+            
+            # tried already: still need to figure out error message if both options are chosen
+            else:
+                # Error Handling:  if neither option is chosen'
+                flash(f"Please choose either Annual or Lifetime.", category='danger')
+                return redirect(url_for('api.getAnnualList'))
                             
             return render_template('annual_list_results.html', form = filtered_list,header=which_list ) 
 
@@ -170,6 +180,29 @@ def internalSearch():
     if request.method == 'POST':
         
         ls_search=lsform.data
+
+        #check for no boxes filled in:
+        count = 0
+        for k, v in ls_search.items():
+            if k == 'common_name' and v =='':
+                count +=1
+            if k == 'date_year' and v =='':
+                count +=1
+            if k == 'county' and v =='':
+                count +=1
+            if k == 'state' and v =='':
+                count +=1
+        if count == 4:
+            flash('Please fill in ONE of the fields below', category='danger')
+            return redirect(url_for('api.internalSearch'))
+        if count == 1 or count == 2:
+            flash('At present, Bird Brain user sightings are only searchable by one field at a time.  Please resubmit with only one field completed.', category='danger')
+            return redirect(url_for('api.internalSearch'))
+ 
+
+        
+        #
+        print(f"This is ls_search:  {ls_search}")
         print(ls_search)
         for k, v in ls_search.items():
             if v != None and k != 'csrf_token' and v !='' and v != True:
